@@ -1,0 +1,181 @@
+version: "3.9"
+
+x-app-base: &app-base
+  build:
+    context: .
+    dockerfile: Dockerfile
+    args:
+      PHP_VERSION: ${PHP_VERSION:-latest}
+  restart: unless-stopped
+  entrypoint: ["/opt/scripts/app-entrypoint.sh"]
+  environment:
+    TZ: ${TZ:-UTC}
+    COMPOSER_MEMORY_LIMIT: -1
+  volumes:
+    - ./scripts:/opt/scripts:ro
+
+services:
+  app1:
+    <<: *app-base
+    container_name: ${APP1_NAME:-app1}
+    environment:
+      APP_NAME: ${APP1_NAME:-app1}
+      APP_PATH: /var/www/app1
+      APP_PORT: ${APP1_PORT:-8081}
+      APP_REPO: ${APP1_REPO:-}
+      APP_BRANCH: ${APP1_BRANCH:-main}
+      APP_TOKEN: ${APP1_TOKEN:-}
+      APP_ENV_PATH: /env/app1.env
+      APP_RUN_MIGRATIONS: ${APP1_RUN_MIGRATIONS:-1}
+      APP_RUN_OPTIMIZE: ${APP1_RUN_OPTIMIZE:-1}
+      APP_RUN_STORAGE_LINK: ${APP1_RUN_STORAGE_LINK:-1}
+      APP_RUN_QUEUE: ${APP1_RUN_QUEUE:-1}
+      APP_RUN_SCHEDULE: ${APP1_RUN_SCHEDULE:-1}
+      APP_RUN_REVERB: ${APP1_RUN_REVERB:-0}
+      APP_REVERB_PORT: ${APP1_REVERB_PORT:-8085}
+      APP_RUN_OCTANE: ${APP1_RUN_OCTANE:-0}
+      APP_BUILD_ASSETS: ${APP1_BUILD_ASSETS:-0}
+      APP_GIT_PULL_ENABLED: ${APP1_GIT_PULL_ENABLED:-1}
+      APP_GIT_PULL_ON_START: ${APP1_GIT_PULL_ON_START:-1}
+      APP_GIT_PULL_SCHEDULE: ${APP1_GIT_PULL_SCHEDULE:-0 2 * * *}
+    ports:
+      - "${APP1_PORT:-8081}:${APP1_PORT:-8081}"
+    volumes:
+      - ./apps/app1:/var/www/app1
+      - ./data/app1/storage:/var/www/app1/storage
+      - ./data/app1/database:/var/www/app1/database
+      - ./env/app1.env:/env/app1.env
+
+  app2:
+    <<: *app-base
+    container_name: ${APP2_NAME:-app2}
+    profiles: ["app2"]
+    environment:
+      APP_NAME: ${APP2_NAME:-app2}
+      APP_PATH: /var/www/app2
+      APP_PORT: ${APP2_PORT:-8082}
+      APP_REPO: ${APP2_REPO:-}
+      APP_BRANCH: ${APP2_BRANCH:-main}
+      APP_TOKEN: ${APP2_TOKEN:-}
+      APP_ENV_PATH: /env/app2.env
+      APP_RUN_MIGRATIONS: ${APP2_RUN_MIGRATIONS:-1}
+      APP_RUN_OPTIMIZE: ${APP2_RUN_OPTIMIZE:-1}
+      APP_RUN_STORAGE_LINK: ${APP2_RUN_STORAGE_LINK:-1}
+      APP_RUN_QUEUE: ${APP2_RUN_QUEUE:-1}
+      APP_RUN_SCHEDULE: ${APP2_RUN_SCHEDULE:-1}
+      APP_RUN_REVERB: ${APP2_RUN_REVERB:-0}
+      APP_REVERB_PORT: ${APP2_REVERB_PORT:-8086}
+      APP_RUN_OCTANE: ${APP2_RUN_OCTANE:-0}
+      APP_BUILD_ASSETS: ${APP2_BUILD_ASSETS:-0}
+      APP_GIT_PULL_ENABLED: ${APP2_GIT_PULL_ENABLED:-1}
+      APP_GIT_PULL_ON_START: ${APP2_GIT_PULL_ON_START:-1}
+      APP_GIT_PULL_SCHEDULE: ${APP2_GIT_PULL_SCHEDULE:-0 2 * * *}
+    ports:
+      - "${APP2_PORT:-8082}:${APP2_PORT:-8082}"
+    volumes:
+      - ./apps/app2:/var/www/app2
+      - ./data/app2/storage:/var/www/app2/storage
+      - ./data/app2/database:/var/www/app2/database
+      - ./env/app2.env:/env/app2.env
+
+  app3:
+    <<: *app-base
+    container_name: ${APP3_NAME:-app3}
+    profiles: ["app3"]
+    environment:
+      APP_NAME: ${APP3_NAME:-app3}
+      APP_PATH: /var/www/app3
+      APP_PORT: ${APP3_PORT:-8083}
+      APP_REPO: ${APP3_REPO:-}
+      APP_BRANCH: ${APP3_BRANCH:-main}
+      APP_TOKEN: ${APP3_TOKEN:-}
+      APP_ENV_PATH: /env/app3.env
+      APP_RUN_MIGRATIONS: ${APP3_RUN_MIGRATIONS:-1}
+      APP_RUN_OPTIMIZE: ${APP3_RUN_OPTIMIZE:-1}
+      APP_RUN_STORAGE_LINK: ${APP3_RUN_STORAGE_LINK:-1}
+      APP_RUN_QUEUE: ${APP3_RUN_QUEUE:-1}
+      APP_RUN_SCHEDULE: ${APP3_RUN_SCHEDULE:-1}
+      APP_RUN_REVERB: ${APP3_RUN_REVERB:-0}
+      APP_REVERB_PORT: ${APP3_REVERB_PORT:-8087}
+      APP_RUN_OCTANE: ${APP3_RUN_OCTANE:-0}
+      APP_BUILD_ASSETS: ${APP3_BUILD_ASSETS:-0}
+      APP_GIT_PULL_ENABLED: ${APP3_GIT_PULL_ENABLED:-1}
+      APP_GIT_PULL_ON_START: ${APP3_GIT_PULL_ON_START:-1}
+      APP_GIT_PULL_SCHEDULE: ${APP3_GIT_PULL_SCHEDULE:-0 2 * * *}
+    ports:
+      - "${APP3_PORT:-8083}:${APP3_PORT:-8083}"
+    volumes:
+      - ./apps/app3:/var/www/app3
+      - ./data/app3/storage:/var/www/app3/storage
+      - ./data/app3/database:/var/www/app3/database
+      - ./env/app3.env:/env/app3.env
+
+  app4:
+    <<: *app-base
+    container_name: ${APP4_NAME:-app4}
+    profiles: ["app4"]
+    environment:
+      APP_NAME: ${APP4_NAME:-app4}
+      APP_PATH: /var/www/app4
+      APP_PORT: ${APP4_PORT:-8084}
+      APP_REPO: ${APP4_REPO:-}
+      APP_BRANCH: ${APP4_BRANCH:-main}
+      APP_TOKEN: ${APP4_TOKEN:-}
+      APP_ENV_PATH: /env/app4.env
+      APP_RUN_MIGRATIONS: ${APP4_RUN_MIGRATIONS:-1}
+      APP_RUN_OPTIMIZE: ${APP4_RUN_OPTIMIZE:-1}
+      APP_RUN_STORAGE_LINK: ${APP4_RUN_STORAGE_LINK:-1}
+      APP_RUN_QUEUE: ${APP4_RUN_QUEUE:-1}
+      APP_RUN_SCHEDULE: ${APP4_RUN_SCHEDULE:-1}
+      APP_RUN_REVERB: ${APP4_RUN_REVERB:-0}
+      APP_REVERB_PORT: ${APP4_REVERB_PORT:-8088}
+      APP_RUN_OCTANE: ${APP4_RUN_OCTANE:-0}
+      APP_BUILD_ASSETS: ${APP4_BUILD_ASSETS:-0}
+      APP_GIT_PULL_ENABLED: ${APP4_GIT_PULL_ENABLED:-1}
+      APP_GIT_PULL_ON_START: ${APP4_GIT_PULL_ON_START:-1}
+      APP_GIT_PULL_SCHEDULE: ${APP4_GIT_PULL_SCHEDULE:-0 2 * * *}
+    ports:
+      - "${APP4_PORT:-8084}:${APP4_PORT:-8084}"
+    volumes:
+      - ./apps/app4:/var/www/app4
+      - ./data/app4/storage:/var/www/app4/storage
+      - ./data/app4/database:/var/www/app4/database
+      - ./env/app4.env:/env/app4.env
+
+  mariadb:
+    image: mariadb:11
+    restart: unless-stopped
+    profiles: ["mariadb"]
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MARIADB_DATABASE:-laravel}
+      MYSQL_USER: ${MARIADB_USER:-laravel}
+      MYSQL_PASSWORD: ${MARIADB_PASSWORD:-secret}
+      TZ: ${TZ:-UTC}
+    ports:
+      - "${MARIADB_PORT:-3306}:3306"
+    volumes:
+      - ./data/mariadb:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    profiles: ["redis"]
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - ./data/redis:/data
+
+  minio:
+    image: minio/minio:latest
+    restart: unless-stopped
+    profiles: ["minio"]
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minio123}
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - ./data/minio:/data
