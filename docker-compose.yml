@@ -25,14 +25,14 @@ services:
     ports:
       - "${MARIADB_PORT:-3306}:3306"
     volumes:
-      - ./data/mariadb:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
   redis:
     image: redis:7
     restart: unless-stopped
     ports:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
-      - ./data/redis:/data
+      - redis_data:/data
   app1:
     <<: *app-base
     build:
@@ -69,8 +69,9 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - ./data/app1/storage:/var/www/app1/storage
-      - ./data/app1/database:/var/www/app1/database
+      - app1_data:/var/www/app1 # This overwrites build-time changes on first startup
+#      - ./data/app1/storage/app:/var/www/app1/storage/app
+#      - ./data/app1/database/database.sqlite:/var/www/app1/database/database.sqlite
       - ./env/app1.env:/env/app1.env
 
   app2:
@@ -110,8 +111,8 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - ./data/app2/storage:/var/www/app2/storage
-      - ./data/app2/database:/var/www/app2/database
+      - ./data/app2/storage/app:/var/www/app2/storage/app
+      - ./data/app2/database/database.sqlite:/var/www/app2/database/database.sqlite
       - ./env/app2.env:/env/app2.env
 
   app3:
@@ -151,8 +152,8 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - ./data/app3/storage:/var/www/app3/storage
-      - ./data/app3/database:/var/www/app3/database
+      - ./data/app3/storage/app:/var/www/app3/storage/app
+      - ./data/app3/database/database.sqlite:/var/www/app3/database/database.sqlite
       - ./env/app3.env:/env/app3.env
 
   app4:
@@ -192,8 +193,8 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - ./data/app4/storage:/var/www/app4/storage
-      - ./data/app4/database:/var/www/app4/database
+      - ./data/app4/storage/app:/var/www/app4/storage/app
+      - ./data/app4/database/database.sqlite:/var/www/app4/database/database.sqlite
       - ./env/app4.env:/env/app4.env
 
 
@@ -203,10 +204,19 @@ services:
     profiles: ["minio"]
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minio}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minio123}
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_SERVER_URL: ${MINIO_SERVER_URL:-}
+      MINIO_BROWSER_REDIRECT_URL: ${MINIO_BROWSER_REDIRECT_URL:-}
     ports:
       - "${MINIO_PORT:-9000}:9000"
       - "${MINIO_CONSOLE_PORT:-9001}:9001"
     volumes:
       - ./data/minio:/data
+volumes:
+  app1_data: { }
+  app2_data: { }
+  app3_data: { }
+  app4_data: { }
+  redis_data: { }
+  mariadb_data: { }
