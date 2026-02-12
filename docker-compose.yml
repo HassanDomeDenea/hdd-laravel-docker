@@ -1,24 +1,50 @@
-version: "3.9"
-
 x-app-base: &app-base
-  build:
-    context: .
-    dockerfile: Dockerfile
-    args:
-      PHP_VERSION: ${PHP_VERSION:-latest}
   restart: unless-stopped
   entrypoint: ["/opt/scripts/app-entrypoint.sh"]
-  environment:
-    TZ: ${TZ:-UTC}
-    COMPOSER_MEMORY_LIMIT: -1
-  volumes:
-    - ./scripts:/opt/scripts:ro
+  depends_on:
+    redis:
+      condition: service_started
+    mariadb:
+      condition: service_healthy
 
 services:
+  mariadb:
+    image: mariadb:12.1
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: ${MARIADB_DATABASE:-laravel}
+      MYSQL_USER: ${MARIADB_USER:-laravel}
+      MYSQL_PASSWORD: ${MARIADB_PASSWORD:-secret}
+      TZ: ${TZ:-UTC}
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "${MARIADB_PORT:-3306}:3306"
+    volumes:
+      - ./data/mariadb:/var/lib/mysql
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - ./data/redis:/data
   app1:
     <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: ${APP1_PHP_VERSION:-8.3}
     container_name: ${APP1_NAME:-app1}
     environment:
+      TZ: ${TZ:-UTC}
+      COMPOSER_MEMORY_LIMIT: -1
+      COMPOSER_AUTH: ${COMPOSER_AUTH:-}
       APP_NAME: ${APP1_NAME:-app1}
       APP_PATH: /var/www/app1
       APP_PORT: ${APP1_PORT:-8081}
@@ -41,16 +67,25 @@ services:
     ports:
       - "${APP1_PORT:-8081}:${APP1_PORT:-8081}"
     volumes:
-      - ./apps/app1:/var/www/app1
+      - ./scripts:/opt/scripts:ro
+      - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
       - ./data/app1/storage:/var/www/app1/storage
       - ./data/app1/database:/var/www/app1/database
       - ./env/app1.env:/env/app1.env
 
   app2:
     <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: ${APP2_PHP_VERSION:-8.3}
     container_name: ${APP2_NAME:-app2}
     profiles: ["app2"]
     environment:
+      TZ: ${TZ:-UTC}
+      COMPOSER_MEMORY_LIMIT: -1
+      COMPOSER_AUTH: ${COMPOSER_AUTH:-}
       APP_NAME: ${APP2_NAME:-app2}
       APP_PATH: /var/www/app2
       APP_PORT: ${APP2_PORT:-8082}
@@ -73,16 +108,25 @@ services:
     ports:
       - "${APP2_PORT:-8082}:${APP2_PORT:-8082}"
     volumes:
-      - ./apps/app2:/var/www/app2
+      - ./scripts:/opt/scripts:ro
+      - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
       - ./data/app2/storage:/var/www/app2/storage
       - ./data/app2/database:/var/www/app2/database
       - ./env/app2.env:/env/app2.env
 
   app3:
     <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: ${APP3_PHP_VERSION:-8.3}
     container_name: ${APP3_NAME:-app3}
     profiles: ["app3"]
     environment:
+      TZ: ${TZ:-UTC}
+      COMPOSER_MEMORY_LIMIT: -1
+      COMPOSER_AUTH: ${COMPOSER_AUTH:-}
       APP_NAME: ${APP3_NAME:-app3}
       APP_PATH: /var/www/app3
       APP_PORT: ${APP3_PORT:-8083}
@@ -105,16 +149,25 @@ services:
     ports:
       - "${APP3_PORT:-8083}:${APP3_PORT:-8083}"
     volumes:
-      - ./apps/app3:/var/www/app3
+      - ./scripts:/opt/scripts:ro
+      - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
       - ./data/app3/storage:/var/www/app3/storage
       - ./data/app3/database:/var/www/app3/database
       - ./env/app3.env:/env/app3.env
 
   app4:
     <<: *app-base
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: ${APP4_PHP_VERSION:-8.3}
     container_name: ${APP4_NAME:-app4}
     profiles: ["app4"]
     environment:
+      TZ: ${TZ:-UTC}
+      COMPOSER_MEMORY_LIMIT: -1
+      COMPOSER_AUTH: ${COMPOSER_AUTH:-}
       APP_NAME: ${APP4_NAME:-app4}
       APP_PATH: /var/www/app4
       APP_PORT: ${APP4_PORT:-8084}
@@ -137,34 +190,12 @@ services:
     ports:
       - "${APP4_PORT:-8084}:${APP4_PORT:-8084}"
     volumes:
-      - ./apps/app4:/var/www/app4
+      - ./scripts:/opt/scripts:ro
+      - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
       - ./data/app4/storage:/var/www/app4/storage
       - ./data/app4/database:/var/www/app4/database
       - ./env/app4.env:/env/app4.env
 
-  mariadb:
-    image: mariadb:11
-    restart: unless-stopped
-    profiles: ["mariadb"]
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MARIADB_DATABASE:-laravel}
-      MYSQL_USER: ${MARIADB_USER:-laravel}
-      MYSQL_PASSWORD: ${MARIADB_PASSWORD:-secret}
-      TZ: ${TZ:-UTC}
-    ports:
-      - "${MARIADB_PORT:-3306}:3306"
-    volumes:
-      - ./data/mariadb:/var/lib/mysql
-
-  redis:
-    image: redis:7
-    restart: unless-stopped
-    profiles: ["redis"]
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
-    volumes:
-      - ./data/redis:/data
 
   minio:
     image: minio/minio:latest

@@ -28,6 +28,14 @@ export APP_RUN_MIGRATIONS APP_RUN_OPTIMIZE APP_RUN_STORAGE_LINK
 export APP_RUN_QUEUE APP_RUN_SCHEDULE APP_RUN_REVERB APP_RUN_OCTANE APP_REVERB_PORT
 export APP_BUILD_ASSETS APP_GIT_PULL_ENABLED APP_GIT_PULL_ON_START APP_GIT_PULL_SCHEDULE
 
+# Fix SSH key permissions (Windows mounts as 0777, SSH requires 600)
+if [[ -f /root/.ssh/id_ed25519 ]]; then
+  cp /root/.ssh/id_ed25519 /tmp/ssh_key
+  chmod 600 /tmp/ssh_key
+  echo -e "Host *\n  IdentityFile /tmp/ssh_key\n  StrictHostKeyChecking no" > /root/.ssh/config
+  chmod 600 /root/.ssh/config
+fi
+
 /opt/scripts/app-init.sh
 
 if [[ "${APP_GIT_PULL_ENABLED}" == "1" ]]; then

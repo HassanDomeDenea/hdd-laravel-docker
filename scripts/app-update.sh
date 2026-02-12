@@ -13,9 +13,11 @@ if [[ ! -d "${APP_PATH}/.git" ]]; then
 fi
 
 repo_url="${APP_REPO}"
+# Handle HTTPS URLs with token authentication
 if [[ -n "${APP_TOKEN}" && "${APP_REPO}" == https://* ]]; then
   repo_url="https://${APP_TOKEN}@${APP_REPO#https://}"
 fi
+# SSH URLs (git@...) use SSH agent forwarding automatically
 
 cd "${APP_PATH}"
 git remote set-url origin "${repo_url}" || true

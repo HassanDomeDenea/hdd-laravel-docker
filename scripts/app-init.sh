@@ -15,10 +15,19 @@ if [[ ! -d "${APP_PATH}/.git" ]]; then
   else
     echo "[${APP_NAME}] Cloning repository..."
     repo_url="${APP_REPO}"
+    # Handle HTTPS URLs with token authentication
     if [[ -n "${APP_TOKEN}" && "${APP_REPO}" == https://* ]]; then
       repo_url="https://${APP_TOKEN}@${APP_REPO#https://}"
     fi
-    git clone --branch "${APP_BRANCH}" "${repo_url}" "${APP_PATH}"
+
+    # SSH URLs (git@...) use SSH agent forwarding automatically
+    TEMP_CLONE_DIR="/tmp/app_clone_$$"
+    git clone --branch "${APP_BRANCH}" "${repo_url}" "${TEMP_CLONE_DIR}"
+    # Copy contents from temp directory to APP_PATH, preserving existing files
+    cp -r "${TEMP_CLONE_DIR}"/.git "${APP_PATH}/"
+    cp -r "${TEMP_CLONE_DIR}"/* "${APP_PATH}/"
+    cp -r "${TEMP_CLONE_DIR}"/.[!.]* "${APP_PATH}/" 2>/dev/null || true
+    rm -rf "${TEMP_CLONE_DIR}"
   fi
 fi
 

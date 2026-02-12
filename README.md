@@ -97,6 +97,57 @@ REDIS_HOST=redis
 - You can turn any worker off per app by setting:
   `APPx_RUN_QUEUE=0`, `APPx_RUN_SCHEDULE=0`, `APPx_RUN_REVERB=0`
 
+## SSH Key Setup for Private Repositories
+
+If your private repository uses SSH instead of HTTPS, you'll need to generate and add SSH keys.
+
+### Linux
+
+1. Generate SSH key:
+   ```bash
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+   Press Enter to accept the default location (`~/.ssh/id_ed25519`).
+
+2. Copy the public key:
+   ```bash
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+3. Add the key to your Git provider (GitHub, GitLab, etc.) in Settings → SSH Keys.
+
+4. Mount the SSH key in `docker-compose.yml`:
+   ```yaml
+   volumes:
+     - ~/.ssh:/root/.ssh:ro
+   ```
+
+### Windows
+
+1. Generate SSH key (PowerShell or Git Bash):
+   ```powershell
+   ssh-keygen -t ed25519 -C "your_email@example.com"
+   ```
+   Press Enter to accept the default location (`C:\Users\YourUsername\.ssh\id_ed25519`).
+
+2. Copy the public key:
+   ```powershell
+   type $home\.ssh\id_ed25519.pub
+   ```
+
+3. Add the key to your Git provider (GitHub, GitLab, etc.) in Settings → SSH Keys.
+
+4. Mount the SSH key in `docker-compose.yml`:
+   ```yaml
+   volumes:
+     - ~\.ssh:/root/.ssh:ro
+   ```
+
+**Note:** For SSH repositories, use the SSH URL format in your `.env` file:
+```
+APP1_REPO=git@github.com:owner/repo.git
+```
+
 ## Usage Examples
 
 Start only app1 with MariaDB:

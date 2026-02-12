@@ -22,11 +22,22 @@ if [[ -f "${APP_PATH}/.env" ]]; then
   fi
 fi
 
+
+
 if [[ ! -d "${APP_PATH}/vendor" ]]; then
   echo "[${APP_NAME}] Running composer install..."
   composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir "${APP_PATH}"
 else
   composer install --no-interaction --prefer-dist --optimize-autoloader --working-dir "${APP_PATH}"
+fi
+
+
+
+app_key="$(grep -E '^APP_KEY=' "${APP_PATH}/.env" | tail -n1 | cut -d= -f2- || true)"
+echo "${app_key}"
+if [[ -z "${app_key}" ]]; then
+  echo "[${APP_NAME}] APP_KEY not found or empty; generating key..."
+  php "${APP_PATH}/artisan" key:generate --force
 fi
 
 if [[ "${APP_RUN_STORAGE_LINK}" == "1" ]]; then
@@ -43,4 +54,11 @@ fi
 
 if [[ "${APP_BUILD_ASSETS}" == "1" ]]; then
   /opt/scripts/app-assets.sh
+fi
+
+# Run per-app custom hook if it exists
+HOOK_SCRIPT="/opt/scripts/hooks/${APP_NAME}.sh"
+if [[ -f "${HOOK_SCRIPT}" ]]; then
+  echo "[${APP_NAME}] Running custom hook: ${HOOK_SCRIPT}"
+  bash "${HOOK_SCRIPT}"
 fi
