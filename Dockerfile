@@ -1,7 +1,11 @@
 ARG PHP_VERSION=latest
 FROM dunglas/frankenphp:php${PHP_VERSION}
 
-RUN XZ_OPT=--no-sandbox install-php-extensions \
+RUN mv /usr/bin/xz /usr/bin/xz.orig && \
+    echo '#!/bin/sh' > /usr/bin/xz && \
+    echo 'exec /usr/bin/xz.orig --no-sandbox "$@"' >> /usr/bin/xz && \
+    chmod +x /usr/bin/xz && \
+    install-php-extensions \
 	pdo_mysql \
 	sockets \
 	gd \
@@ -11,7 +15,8 @@ RUN XZ_OPT=--no-sandbox install-php-extensions \
 	redis \
 	gmp \
 	bcmath \
-	exif
+	exif && \
+    mv /usr/bin/xz.orig /usr/bin/xz
 
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
