@@ -1,6 +1,8 @@
 ARG PHP_VERSION=latest
 FROM dunglas/frankenphp:php${PHP_VERSION}
 
+ENV XZ_OPT=--no-sandbox
+
 RUN install-php-extensions \
 	pdo_mysql \
 	sockets \
