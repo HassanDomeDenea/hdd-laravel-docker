@@ -2,13 +2,13 @@
 set -euo pipefail
 
 APP_PATH="${APP_PATH:?}"
-APP_NAME="${APP_NAME:-app}"
+APP_CONTAINER_NAME="${APP_CONTAINER_NAME:-app}"
 APP_REPO="${APP_REPO:-}"
 APP_BRANCH="${APP_BRANCH:-main}"
 APP_TOKEN="${APP_TOKEN:-}"
 
 if [[ ! -d "${APP_PATH}/.git" ]]; then
-  echo "[${APP_NAME}] No git repo found; skipping update."
+  echo "[${APP_CONTAINER_NAME}] No git repo found; skipping update."
   exit 0
 fi
 
@@ -28,8 +28,8 @@ git pull --rebase
 after_rev="$(git rev-parse HEAD)"
 
 if [[ "${before_rev}" != "${after_rev}" ]]; then
-  echo "[${APP_NAME}] Changes detected; running post-merge tasks."
+  echo "[${APP_CONTAINER_NAME}] Changes detected; running post-merge tasks."
   /opt/scripts/app-post-merge.sh "update"
 else
-  echo "[${APP_NAME}] No changes detected."
+  echo "[${APP_CONTAINER_NAME}] No changes detected."
 fi

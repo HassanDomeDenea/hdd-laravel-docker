@@ -44,12 +44,11 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${APP1_PHP_VERSION:-8.3}
-    container_name: ${APP1_NAME:-app1}
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
-      APP_NAME: ${APP1_NAME:-app1}
+      APP_CONTAINER_NAME: app1
       APP_PATH: /var/www/app1
       APP_PORT: 8000
       OCTANE_PORT: 8000
@@ -80,7 +79,6 @@ services:
 #      - ./data/app1/storage/app:/var/www/app1/storage/app
 #      - ./data/app1/database/database.sqlite:/var/www/app1/database/database.sqlite
       - ./env/app1.env:/env/app1.env
-
   app2:
     <<: *app-base
     build:
@@ -88,13 +86,12 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${APP2_PHP_VERSION:-8.3}
-    container_name: ${APP2_NAME:-app2}
     profiles: ["app2"]
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
-      APP_NAME: ${APP2_NAME:-app2}
+      APP_CONTAINER_NAME: app2
       APP_PATH: /var/www/app2
       APP_PORT: ${APP2_PORT:-8082}
       APP_REPO: ${APP2_REPO:-}
@@ -123,7 +120,6 @@ services:
       - ./data/app2/storage/app:/var/www/app2/storage/app
       - ./data/app2/database/database.sqlite:/var/www/app2/database/database.sqlite
       - ./env/app2.env:/env/app2.env
-
   app3:
     <<: *app-base
     build:
@@ -131,13 +127,12 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${APP3_PHP_VERSION:-8.3}
-    container_name: ${APP3_NAME:-app3}
     profiles: ["app3"]
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
-      APP_NAME: ${APP3_NAME:-app3}
+      APP_CONTAINER_NAME: app3
       APP_PATH: /var/www/app3
       APP_PORT: ${APP3_PORT:-8083}
       APP_REPO: ${APP3_REPO:-}
@@ -166,7 +161,6 @@ services:
       - ./data/app3/storage/app:/var/www/app3/storage/app
       - ./data/app3/database/database.sqlite:/var/www/app3/database/database.sqlite
       - ./env/app3.env:/env/app3.env
-
   app4:
     <<: *app-base
     build:
@@ -174,13 +168,12 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${APP4_PHP_VERSION:-8.3}
-    container_name: ${APP4_NAME:-app4}
     profiles: ["app4"]
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
-      APP_NAME: ${APP4_NAME:-app4}
+      APP_CONTAINER_NAME: app4
       APP_PATH: /var/www/app4
       APP_PORT: ${APP4_PORT:-8084}
       APP_REPO: ${APP4_REPO:-}
@@ -209,8 +202,6 @@ services:
       - ./data/app4/storage/app:/var/www/app4/storage/app
       - ./data/app4/database/database.sqlite:/var/www/app4/database/database.sqlite
       - ./env/app4.env:/env/app4.env
-
-
   minio:
     image: minio/minio:latest
     restart: unless-stopped

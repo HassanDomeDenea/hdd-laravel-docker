@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+APP_CONTAINER_NAME="${APP_CONTAINER_NAME:app}"
 APP_PATH="${APP_PATH:?}"
 APP_REPO="${APP_REPO:-}"
 APP_BRANCH="${APP_BRANCH:-main}"
@@ -11,9 +12,9 @@ mkdir -p "${APP_PATH}"
 
 if [[ ! -d "${APP_PATH}/.git" ]]; then
   if [[ -z "${APP_REPO}" ]]; then
-    echo "[${APP_NAME}] APP_REPO is empty; skipping clone."
+    echo "[${APP_CONTAINER_NAME}] APP_REPO is empty; skipping clone."
   else
-    echo "[${APP_NAME}] Cloning repository..."
+    echo "[${APP_CONTAINER_NAME}] Cloning repository..."
     repo_url="${APP_REPO}"
     # Handle HTTPS URLs with token authentication
     if [[ -n "${APP_TOKEN}" && "${APP_REPO}" == https://* ]]; then
