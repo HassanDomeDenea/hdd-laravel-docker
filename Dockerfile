@@ -1,11 +1,7 @@
 ARG PHP_VERSION=latest
-FROM dunglas/frankenphp:php${PHP_VERSION}
+FROM dunglas/frankenphp:php${PHP_VERSION}-bookworm
 
-RUN mv /usr/bin/xz /usr/bin/xz.orig && \
-    echo '#!/bin/sh' > /usr/bin/xz && \
-    echo 'exec /usr/bin/xz.orig --no-sandbox "$@"' >> /usr/bin/xz && \
-    chmod +x /usr/bin/xz && \
-    install-php-extensions \
+RUN install-php-extensions \
 	pdo_mysql \
 	sockets \
 	gd \
@@ -15,8 +11,7 @@ RUN mv /usr/bin/xz /usr/bin/xz.orig && \
 	redis \
 	gmp \
 	bcmath \
-	exif && \
-    mv /usr/bin/xz.orig /usr/bin/xz
+	exif
 
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
