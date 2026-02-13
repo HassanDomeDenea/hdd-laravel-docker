@@ -22,15 +22,15 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-    ports:
-      - "${MARIADB_PORT:-3306}:3306"
+#    ports:
+#      - "${MARIADB_PORT:-3306}:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
   redis:
     image: redis:7
     restart: unless-stopped
-    ports:
-      - "${REDIS_PORT:-6379}:6379"
+#    ports:
+#      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
   app1:
