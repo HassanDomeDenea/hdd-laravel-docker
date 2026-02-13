@@ -121,6 +121,10 @@ If your private repository uses SSH instead of HTTPS, you'll need to generate an
    volumes:
      - ~/.ssh:/root/.ssh:ro
    ```
+5. Run:
+   ```bash
+    chmod +x scripts/*.sh
+   ```
 
 ### Windows
 

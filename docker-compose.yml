@@ -26,6 +26,8 @@ services:
 #      - "${MARIADB_PORT:-3306}:3306"
     volumes:
       - mariadb_data:/var/lib/mysql
+    networks:
+      - app-network
   redis:
     image: redis:7
     restart: unless-stopped
@@ -33,6 +35,8 @@ services:
 #      - "${REDIS_PORT:-6379}:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - app-network
   app1:
     <<: *app-base
     build:
@@ -66,6 +70,8 @@ services:
       APP_GIT_PULL_SCHEDULE: ${APP1_GIT_PULL_SCHEDULE:-0 2 * * *}
     ports:
       - "${APP1_PORT:-8081}:${APP1_PORT:-8081}"
+    networks:
+      - app-network
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
@@ -108,6 +114,8 @@ services:
       APP_GIT_PULL_SCHEDULE: ${APP2_GIT_PULL_SCHEDULE:-0 2 * * *}
     ports:
       - "${APP2_PORT:-8082}:${APP2_PORT:-8082}"
+    networks:
+      - app-network
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
@@ -149,6 +157,8 @@ services:
       APP_GIT_PULL_SCHEDULE: ${APP3_GIT_PULL_SCHEDULE:-0 2 * * *}
     ports:
       - "${APP3_PORT:-8083}:${APP3_PORT:-8083}"
+    networks:
+      - app-network
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
@@ -190,6 +200,8 @@ services:
       APP_GIT_PULL_SCHEDULE: ${APP4_GIT_PULL_SCHEDULE:-0 2 * * *}
     ports:
       - "${APP4_PORT:-8084}:${APP4_PORT:-8084}"
+    networks:
+      - app-network
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
@@ -211,8 +223,14 @@ services:
     ports:
       - "${MINIO_PORT:-9000}:9000"
       - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    networks:
+      - app-network
     volumes:
       - ./data/minio:/data
+networks:
+  app-network:
+    name: ${DOCKER_NETWORK_NAME:-br-laraveln0}
+    driver: bridge
 volumes:
   app1_data: { }
   app2_data: { }
