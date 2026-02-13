@@ -51,7 +51,8 @@ services:
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
       APP_NAME: ${APP1_NAME:-app1}
       APP_PATH: /var/www/app1
-      APP_PORT: ${APP1_PORT:-8081}
+      APP_PORT: 8000
+      OCTANE_PORT: 8000
       APP_REPO: ${APP1_REPO:-}
       APP_BRANCH: ${APP1_BRANCH:-main}
       APP_TOKEN: ${APP1_TOKEN:-}
@@ -69,7 +70,7 @@ services:
       APP_GIT_PULL_ON_START: ${APP1_GIT_PULL_ON_START:-1}
       APP_GIT_PULL_SCHEDULE: ${APP1_GIT_PULL_SCHEDULE:-0 2 * * *}
     ports:
-      - "${APP1_PORT:-8081}:${APP1_PORT:-8081}"
+      - "${APP1_PORT:-8081}:8000"
     networks:
       - app-network
     volumes:
