@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Example per-app custom hook script.
-# Copy this file and rename it to match your APP_NAME (e.g., app1.sh).
+# Copy this file and rename it to match your APP_CONTAINER_NAME (e.g., app1.sh).
 # It runs after composer install, migrations, optimize, and asset build.
 #
 # Available environment variables:
-#   APP_NAME, APP_PATH, APP_PORT, and all other APP_* vars
+#   APP_CONTAINER_NAME, APP_PATH, APP_PORT, and all other APP_* vars
 #
 # Examples:
 #   php "${APP_PATH}/artisan" db:seed --force
