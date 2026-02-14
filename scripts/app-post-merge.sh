@@ -33,10 +33,14 @@ fi
 
 
 
-app_key="$(grep -E '^APP_KEY=' "${APP_PATH}/.env" | tail -n1 | cut -d= -f2- || true)"
+app_key="$(grep -E '^APP_KEY=' "${APP_PATH}/.env" | tail -n1 | cut -d= -f2- | tr -d '\r' | xargs || true)"
+echo "${app_key}"
 if [[ -z "${app_key}" ]]; then
   echo "[${APP_CONTAINER_NAME}] APP_KEY not found or empty; generating key..."
   php "${APP_PATH}/artisan" key:generate --force
+  app_key="$(grep -E '^APP_KEY=' "${APP_PATH}/.env" | tail -n1 | cut -d= -f2-)"
+else
+  echo "[${APP_CONTAINER_NAME}] APP_KEY found: ${app_key}"
 fi
 
 if [[ "${APP_RUN_STORAGE_LINK}" == "1" ]]; then

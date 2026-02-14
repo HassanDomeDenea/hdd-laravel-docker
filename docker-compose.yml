@@ -13,10 +13,7 @@ services:
     container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-root}
-      MYSQL_DATABASE: ${MARIADB_DATABASE:-laravel}
-      MYSQL_USER: ${MARIADB_USER:-laravel}
-      MYSQL_PASSWORD: ${MARIADB_PASSWORD:-secret}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       TZ: ${TZ:-UTC}
     healthcheck:
       test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
@@ -78,10 +75,11 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - ${APP1_CONTAINER_NAME:-app1}_data:/var/www/${APP1_CONTAINER_NAME:-app1} # This overwrites build-time changes on the first startup
+      - app1_data:/var/www/${APP1_CONTAINER_NAME:-app1} # This overwrites build-time changes on the first startup
       - ${DATA_PATH:-./data}/${APP1_CONTAINER_NAME:-app1}/storage/app:/var/www/${APP1_CONTAINER_NAME:-app1}/storage/app
       - ${DATA_PATH:-./data}/${APP1_CONTAINER_NAME:-app1}/database:/var/www/${APP1_CONTAINER_NAME:-app1}/database
       - ${ENV_PATH:-./env}/${APP1_CONTAINER_NAME:-app1}.env:/env/${APP1_CONTAINER_NAME:-app1}.env
+      - ${ENV_PATH:-./env}/${APP1_CONTAINER_NAME:-app1}.env:/var/www/${APP1_CONTAINER_NAME:-app1}/.env
   app2:
     <<: *app-base
     build:
@@ -122,7 +120,7 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - ${APP2_CONTAINER_NAME:-app2}_data:/var/www/${APP2_CONTAINER_NAME:-app2}
+      - app2_data:/var/www/${APP2_CONTAINER_NAME:-app2}
       - ${DATA_PATH:-./data}/${APP2_CONTAINER_NAME:-app2}/storage/app:/var/www/${APP2_CONTAINER_NAME:-app2}/storage/app
       - ${DATA_PATH:-./data}/${APP2_CONTAINER_NAME:-app2}/database:/var/www/${APP2_CONTAINER_NAME:-app2}/database
       - ${ENV_PATH:-./env}/${APP2_CONTAINER_NAME:-app2}.env:/env/${APP2_CONTAINER_NAME:-app2}.env
@@ -165,7 +163,7 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - ${APP3_CONTAINER_NAME:-app3}_data:/var/www/${APP3_CONTAINER_NAME:-app3}
+      - app3_data:/var/www/${APP3_CONTAINER_NAME:-app3}
       - ${DATA_PATH:-./data}/${APP3_CONTAINER_NAME:-app3}/storage/app:/var/www/${APP3_CONTAINER_NAME:-app3}/storage/app
       - ${DATA_PATH:-./data}/${APP3_CONTAINER_NAME:-app3}/database:/var/www/${APP3_CONTAINER_NAME:-app3}/database
       - ${ENV_PATH:-./env}/${APP3_CONTAINER_NAME:-app3}.env:/env/${APP3_CONTAINER_NAME:-app3}.env
@@ -208,7 +206,7 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - ${APP4_CONTAINER_NAME:-app4}_data:/var/www/${APP4_CONTAINER_NAME:-app4}
+      - app4_data:/var/www/${APP4_CONTAINER_NAME:-app4}
       - ${DATA_PATH:-./data}/${APP4_CONTAINER_NAME:-app4}/storage/app:/var/www/${APP4_CONTAINER_NAME:-app4}/storage/app
       - ${DATA_PATH:-./data}/${APP4_CONTAINER_NAME:-app4}/database:/var/www/${APP4_CONTAINER_NAME:-app4}/database
       - ${ENV_PATH:-./env}/${APP4_CONTAINER_NAME:-app4}.env:/env/${APP4_CONTAINER_NAME:-app4}.env
@@ -235,9 +233,15 @@ networks:
     name: ${DOCKER_NETWORK_NAME:-br-laraveln0}
     driver: bridge
 volumes:
-  ${APP1_CONTAINER_NAME:-app1}_data: { }
-  ${APP2_CONTAINER_NAME:-app2}_data: { }
-  ${APP3_CONTAINER_NAME:-app3}_data: { }
-  ${APP4_CONTAINER_NAME:-app4}_data: { }
-  ${REDIS_VOLUME_NAME:-redis_data}: { }
-  ${MARIADB_VOLUME_NAME:-mariadb_data}: { }
+  app1_data:
+    name: ${APP1_CONTAINER_NAME:-app1}_data
+  app2_data:
+    name: ${APP2_CONTAINER_NAME:-app2}_data
+  app3_data:
+    name: ${APP3_CONTAINER_NAME:-app3}_data
+  app4_data:
+    name: ${APP4_CONTAINER_NAME:-app4}_data
+  redis_data:
+    name: ${REDIS_VOLUME_NAME:-redis_data}
+  mariadb_data:
+    name: ${MARIADB_VOLUME_NAME:-mariadb_data}
