@@ -44,11 +44,12 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${APP1_PHP_VERSION:-8.3}
+    container_name: ${APP1_CONTAINER_NAME:-app1}
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
-      APP_CONTAINER_NAME: app1
+      APP_CONTAINER_NAME: ${APP1_CONTAINER_NAME:-app1}
       APP_PATH: /var/www/app1
       APP_PORT: 8000
       OCTANE_PORT: 8000
@@ -86,12 +87,13 @@ services:
       dockerfile: Dockerfile
       args:
         PHP_VERSION: ${APP2_PHP_VERSION:-8.3}
+    container_name: ${APP2_CONTAINER_NAME:-app2}
     profiles: ["app2"]
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
-      APP_CONTAINER_NAME: app2
+      APP_CONTAINER_NAME: ${APP2_CONTAINER_NAME:-app2}
       APP_PATH: /var/www/app2
       APP_PORT: ${APP2_PORT:-8082}
       APP_REPO: ${APP2_REPO:-}
@@ -128,11 +130,12 @@ services:
       args:
         PHP_VERSION: ${APP3_PHP_VERSION:-8.3}
     profiles: ["app3"]
+    container_name: ${APP3_CONTAINER_NAME:-app3}
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
-      APP_CONTAINER_NAME: app3
+      APP_CONTAINER_NAME: ${APP3_CONTAINER_NAME:-app3}
       APP_PATH: /var/www/app3
       APP_PORT: ${APP3_PORT:-8083}
       APP_REPO: ${APP3_REPO:-}
@@ -169,11 +172,12 @@ services:
       args:
         PHP_VERSION: ${APP4_PHP_VERSION:-8.3}
     profiles: ["app4"]
+    container_name: ${APP4_CONTAINER_NAME:-app4}
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
       COMPOSER_AUTH: ${COMPOSER_AUTH:-}
-      APP_CONTAINER_NAME: app4
+      APP_CONTAINER_NAME: ${APP4_CONTAINER_NAME:-app4}
       APP_PATH: /var/www/app4
       APP_PORT: ${APP4_PORT:-8084}
       APP_REPO: ${APP4_REPO:-}
