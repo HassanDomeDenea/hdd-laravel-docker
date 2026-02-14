@@ -177,8 +177,3 @@ Tail logs for app1:
 ```bash
 docker compose logs -f app1
 ```
-
-## Next Ideas
-
-- Add a nightly backup job for `data/` volumes.
-- Add healthchecks and alerts based on HTTP and queue health.
