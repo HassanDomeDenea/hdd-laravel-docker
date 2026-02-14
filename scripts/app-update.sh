@@ -23,8 +23,8 @@ cd "${APP_PATH}"
 git remote set-url origin "${repo_url}" || true
 before_rev="$(git rev-parse HEAD)"
 git fetch --all --prune
-git checkout "${APP_BRANCH}"
-git pull --rebase
+git checkout -B "${APP_BRANCH}" "origin/${APP_BRANCH}"
+git reset --hard "origin/${APP_BRANCH}"
 after_rev="$(git rev-parse HEAD)"
 
 if [[ "${before_rev}" != "${after_rev}" ]]; then

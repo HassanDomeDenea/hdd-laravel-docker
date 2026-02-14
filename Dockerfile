@@ -23,6 +23,7 @@ RUN apt-get update \
         curl \
         mariadb-client \
         net-tools \
+        nano \
         git \
         openssh-client \
         sqlite3 \
