@@ -76,8 +76,8 @@ services:
     volumes:
       - ./scripts:/opt/scripts:ro
       - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
-      - app1_data:/var/www/app1 # This overwrites build-time changes on first startup
-#      - ./data/app1/storage/app:/var/www/app1/storage/app
+#      - app1_data:/var/www/app1 # This overwrites build-time changes on first startup
+      - ./data/app1/storage/app:/var/www/app1/storage/app
 #      - ./data/app1/database/database.sqlite:/var/www/app1/database/database.sqlite
       - ./env/app1.env:/env/app1.env
   app2:

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_CONTAINER_NAME="${APP_CONTAINER_NAME:app}"
+APP_CONTAINER_NAME="${APP_CONTAINER_NAME:-app}"
 APP_PATH="${APP_PATH:?}"
 APP_REPO="${APP_REPO:-}"
 APP_BRANCH="${APP_BRANCH:-main}"
