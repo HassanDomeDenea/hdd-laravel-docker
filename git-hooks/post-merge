@@ -1,0 +1,6 @@
+#!/bin/sh
+# This hook runs after a successful 'git pull'.
+# It ensures that all scripts in the scripts/ directory are executable.
+
+echo "Running post-merge hook: Setting executable permissions on scripts/*.sh"
+chmod +x scripts/*.sh

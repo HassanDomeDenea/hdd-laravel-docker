@@ -123,8 +123,17 @@ If your private repository uses SSH instead of HTTPS, you'll need to generate an
    ```
 5. Run:
    ```bash
-    chmod +x scripts/*.sh
+   chmod +x scripts/*.sh
    ```
+
+### Git Hook (Optional)
+
+To automatically set executable permissions on scripts after every `git pull`, you can use the provided git hook:
+
+```bash
+git config core.hooksPath git-hooks
+chmod +x git-hooks/post-merge
+```
 
 ### Windows
 
