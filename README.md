@@ -177,3 +177,27 @@ Tail logs for app1:
 ```bash
 docker compose logs -f app1
 ```
+
+## Useful Commands:
+
+SSH Like:
+
+```bash
+docker exec -it app1 /bin/bash
+```
+
+or (for this demo)
+
+```bash
+docker exec -it app2 /bin/bash
+```
+
+## Fix Firewall issue in CWP Pro:
+
+Quickly get all container IPs
+
+```bash
+docker ps -q | xargs -n 1 docker inspect --format '{{ .Name }} {{range .NetworkSettings.Networks}} {{.IPAddress}}{{end}}' | sed 's#^/##'
+```
+
+Add the containers IPS to CWP panel-> Security -> CSF Firewall -> Quick Allow IPs
