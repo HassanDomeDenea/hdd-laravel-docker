@@ -38,6 +38,13 @@ RUN apt-get update \
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
+# Install Bun
+RUN curl -fsSL https://bun.sh/install | bash
+
+# Add bun to PATH
+ENV BUN_INSTALL=/root/.bun
+ENV PATH="${BUN_INSTALL}/bin:${PATH}"
+
 # Configure SSH for git operations
 RUN mkdir -p /root/.ssh \
     && chmod 700 /root/.ssh \
