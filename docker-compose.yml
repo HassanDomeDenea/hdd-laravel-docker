@@ -74,7 +74,7 @@ services:
       - app-network
     volumes:
       - ./scripts:/opt/scripts:ro
-      - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
+      - ${APP1_SSH_KEY_PATH:?Set APP1_SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
       - app1_data:/var/www/${APP1_CONTAINER_NAME:-app1} # This overwrites build-time changes on the first startup
       - ${DATA_PATH:-./data}/${APP1_CONTAINER_NAME:-app1}/storage/app:/var/www/${APP1_CONTAINER_NAME:-app1}/storage/app
       - ${DATA_PATH:-./data}/${APP1_CONTAINER_NAME:-app1}/database:/var/www/${APP1_CONTAINER_NAME:-app1}/database
@@ -119,7 +119,7 @@ services:
       - app-network
     volumes:
       - ./scripts:/opt/scripts:ro
-      - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
+      - ${APP2_SSH_KEY_PATH:?Set APP2_SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
       - app2_data:/var/www/${APP2_CONTAINER_NAME:-app2}
       - ${DATA_PATH:-./data}/${APP2_CONTAINER_NAME:-app2}/storage/app:/var/www/${APP2_CONTAINER_NAME:-app2}/storage/app
       - ${DATA_PATH:-./data}/${APP2_CONTAINER_NAME:-app2}/database:/var/www/${APP2_CONTAINER_NAME:-app2}/database
@@ -163,7 +163,7 @@ services:
       - app-network
     volumes:
       - ./scripts:/opt/scripts:ro
-      - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
+      - ${APP3_SSH_KEY_PATH:?Set APP3_SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
       - app3_data:/var/www/${APP3_CONTAINER_NAME:-app3}
       - ${DATA_PATH:-./data}/${APP3_CONTAINER_NAME:-app3}/storage/app:/var/www/${APP3_CONTAINER_NAME:-app3}/storage/app
       - ${DATA_PATH:-./data}/${APP3_CONTAINER_NAME:-app3}/database:/var/www/${APP3_CONTAINER_NAME:-app3}/database
@@ -207,7 +207,7 @@ services:
       - app-network
     volumes:
       - ./scripts:/opt/scripts:ro
-      - ${SSH_KEY_PATH:?Set SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
+      - ${APP4_SSH_KEY_PATH:?Set APP4_SSH_KEY_PATH in .env}:/root/.ssh/id_ed25519:ro
       - app4_data:/var/www/${APP4_CONTAINER_NAME:-app4}
       - ${DATA_PATH:-./data}/${APP4_CONTAINER_NAME:-app4}/storage/app:/var/www/${APP4_CONTAINER_NAME:-app4}/storage/app
       - ${DATA_PATH:-./data}/${APP4_CONTAINER_NAME:-app4}/database:/var/www/${APP4_CONTAINER_NAME:-app4}/database
