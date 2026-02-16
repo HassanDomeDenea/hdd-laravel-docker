@@ -141,6 +141,7 @@ services:
       APP_PATH: /var/www/${APP3_CONTAINER_NAME:-app3}
       APP_PORT: 8000
       OCTANE_PORT: 8000
+      APP_REPO: ${APP3_REPO:-}
       APP_BRANCH: ${APP3_BRANCH:-main}
       APP_TOKEN: ${APP3_TOKEN:-}
       APP_ENV_PATH: /env/${APP3_CONTAINER_NAME:-app3}.env
@@ -184,6 +185,7 @@ services:
       APP_PATH: /var/www/${APP4_CONTAINER_NAME:-app4}
       APP_PORT: 8000
       OCTANE_PORT: 8000
+      APP_REPO: ${APP4_REPO:-}
       APP_BRANCH: ${APP4_BRANCH:-main}
       APP_TOKEN: ${APP4_TOKEN:-}
       APP_ENV_PATH: /env/${APP4_CONTAINER_NAME:-app4}.env
