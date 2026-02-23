@@ -24,12 +24,26 @@ fi
 
 if [[ "${APP_RUN_QUEUE}" == "1" ]]; then
   echo "[${APP_CONTAINER_NAME}] Starting queue worker..."
-  php artisan queue:work --sleep=3 --tries=3 &
+
+  (
+    while true; do
+      php artisan queue:work --sleep=3 --tries=3
+      echo "[${APP_CONTAINER_NAME}] Queue worker exited. Restarting..."
+      sleep 2
+    done
+  ) &
 fi
 
 if [[ "${APP_RUN_REVERB}" == "1" ]]; then
   echo "[${APP_CONTAINER_NAME}] Starting Reverb server..."
-  php artisan reverb:start --host=0.0.0.0 --port="${APP_REVERB_PORT}" &
+
+  (
+    while true; do
+      php artisan reverb:start --host=0.0.0.0 --port="${APP_REVERB_PORT}"
+      echo "[${APP_CONTAINER_NAME}] Reverb stopped, restarting in 2 seconds..."
+      sleep 2
+    done
+  ) &
 fi
 
 if [[ "${APP_RUN_OCTANE}" == "1" ]]; then
