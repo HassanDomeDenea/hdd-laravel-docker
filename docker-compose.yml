@@ -11,6 +11,7 @@ services:
   mariadb:
     image: mariadb:12.1
     container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
+    profiles: ["mariadb"]
     restart: unless-stopped
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
@@ -29,6 +30,7 @@ services:
   redis:
     image: redis:7
     container_name: ${REDIS_CONTAINER_NAME:-redis}
+    profiles: ["redis"]
     restart: unless-stopped
 #    ports:
 #      - "${REDIS_PORT:-6379}:6379"
@@ -44,6 +46,7 @@ services:
       args:
         PHP_VERSION: ${APP1_PHP_VERSION:-8.3}
     container_name: ${APP1_CONTAINER_NAME:-app1}
+    profiles: ["app1"]
     environment:
       TZ: ${TZ:-UTC}
       COMPOSER_MEMORY_LIMIT: -1
