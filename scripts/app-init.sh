@@ -23,7 +23,9 @@ if [[ ! -d "${APP_PATH}/.git" ]]; then
 
     # SSH URLs (git@...) use SSH agent forwarding automatically
     TEMP_CLONE_DIR="/tmp/app_clone_$$"
-    git clone --branch "${APP_BRANCH}" "${repo_url}" "${TEMP_CLONE_DIR}"
+    git clone --recurse-submodules --branch "${APP_BRANCH}" "${repo_url}" "${TEMP_CLONE_DIR}"
+    git config submodule.recurse true
+    git submodule update --remote --merge
     # Copy contents from temp directory to APP_PATH, preserving existing files
     cp -r "${TEMP_CLONE_DIR}"/.git "${APP_PATH}/"
     cp -r "${TEMP_CLONE_DIR}"/* "${APP_PATH}/"
