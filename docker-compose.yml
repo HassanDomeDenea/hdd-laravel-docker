@@ -23,7 +23,7 @@ services:
 #    ports:
 #      - "${MARIADB_PORT:-3306}:3306"
     volumes:
-      - ${MARIADB_VOLUME_NAME:-mariadb_data}:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     networks:
       - app-network
   redis:
@@ -33,7 +33,7 @@ services:
 #    ports:
 #      - "${REDIS_PORT:-6379}:6379"
     volumes:
-      - ${REDIS_VOLUME_NAME:-redis_data}:/data
+      - redis_data:/data
     networks:
       - app-network
   app1:
