@@ -36,6 +36,10 @@ if [[ ! -d "${APP_PATH}/.git" ]]; then
   fi
 fi
 
+if [[ ! -f "${APP_PATH}/public/.user.ini" ]]; then
+  cp -f "${APP_PATH}/public/.user.ini" "/usr/local/etc/php/conf.d/z-${APP_CONTAINER_NAME}.ini"
+fi
+
 if [[ ! -f "${APP_PATH}/.env" ]]; then
   if [[ -f "${APP_ENV_PATH}" ]]; then
     cp -f "${APP_ENV_PATH}" "${APP_PATH}/.env"

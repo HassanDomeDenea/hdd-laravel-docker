@@ -201,3 +201,4 @@ docker ps -q | xargs -n 1 docker inspect --format '{{ .Name }} {{range .NetworkS
 ```
 
 Add the containers IPS to CWP panel-> Security -> CSF Firewall -> Quick Allow IPs
+Or better, add docker folder ip with mask, example: `172.20.0.0/24` , with changing the `20` to the required folder.
