@@ -31,7 +31,7 @@ if [[ "${before_rev}" != "${after_rev}" ]]; then
   echo "[${APP_CONTAINER_NAME}] Changes detected; running post-merge tasks."
   /opt/scripts/app-post-merge.sh "update"
 
-  if [[ ! -f "${APP_PATH}/public/.user.ini" ]]; then
+  if [[ -f "${APP_PATH}/public/.user.ini" ]]; then
     cp -f "${APP_PATH}/public/.user.ini" "/usr/local/etc/php/conf.d/z-${APP_CONTAINER_NAME}.ini"
   fi
 else
