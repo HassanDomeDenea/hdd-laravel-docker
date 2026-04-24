@@ -6,6 +6,7 @@ APP_CONTAINER_NAME="${APP_CONTAINER_NAME:-app}"
 APP_REPO="${APP_REPO:-}"
 APP_BRANCH="${APP_BRANCH:-main}"
 APP_TOKEN="${APP_TOKEN:-}"
+RESTART_ON_CHANGE="${1:-}"
 
 if [[ ! -d "${APP_PATH}/.git" ]]; then
   echo "[${APP_CONTAINER_NAME}] No git repo found; skipping update."
@@ -31,8 +32,13 @@ if [[ "${before_rev}" != "${after_rev}" ]]; then
   echo "[${APP_CONTAINER_NAME}] Changes detected; running post-merge tasks."
   /opt/scripts/app-post-merge.sh "update"
 
-  if [[ ! -f "${APP_PATH}/public/.user.ini" ]]; then
+  if [[ -f "${APP_PATH}/public/.user.ini" ]]; then
     cp -f "${APP_PATH}/public/.user.ini" "/usr/local/etc/php/conf.d/z-${APP_CONTAINER_NAME}.ini"
+  fi
+
+  if [[ "${RESTART_ON_CHANGE}" == "--restart-container" ]]; then
+    echo "[${APP_CONTAINER_NAME}] Update applied; restarting container to reload long-running processes."
+    kill -TERM 1
   fi
 else
   echo "[${APP_CONTAINER_NAME}] No changes detected."

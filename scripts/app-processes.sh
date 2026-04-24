@@ -27,7 +27,7 @@ if [[ "${APP_RUN_QUEUE}" == "1" ]]; then
 
   (
     while true; do
-      php artisan queue:work --sleep=3 --tries=3
+      php artisan queue:work --sleep=3 --tries=3 --max-jobs=500 --max-time=3600
       echo "[${APP_CONTAINER_NAME}] Queue worker exited. Restarting..."
       sleep 2
     done

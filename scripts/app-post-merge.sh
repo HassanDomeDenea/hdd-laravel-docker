@@ -34,25 +34,23 @@ fi
 
 
 app_key="$(grep -E '^APP_KEY=' "${APP_PATH}/.env" | tail -n1 | cut -d= -f2- | tr -d '\r' | xargs || true)"
-echo "${app_key}"
 if [[ -z "${app_key}" ]]; then
   echo "[${APP_CONTAINER_NAME}] APP_KEY not found or empty; generating key..."
   php "${APP_PATH}/artisan" key:generate --force
-  app_key="$(grep -E '^APP_KEY=' "${APP_PATH}/.env" | tail -n1 | cut -d= -f2-)"
 else
-  echo "[${APP_CONTAINER_NAME}] APP_KEY found: ${app_key}"
+  echo "[${APP_CONTAINER_NAME}] APP_KEY is present."
 fi
 
 if [[ "${APP_RUN_STORAGE_LINK}" == "1" ]]; then
-  php "${APP_PATH}/artisan" storage:link || true
+  php "${APP_PATH}/artisan" storage:link
 fi
 
 if [[ "${APP_RUN_MIGRATIONS}" == "1" ]]; then
-  php "${APP_PATH}/artisan" migrate --force || true
+  php "${APP_PATH}/artisan" migrate --force
 fi
 
 if [[ "${APP_RUN_OPTIMIZE}" == "1" ]]; then
-  php "${APP_PATH}/artisan" optimize || true
+  php "${APP_PATH}/artisan" optimize
 fi
 
 if [[ "${APP_BUILD_ASSETS}" == "1" ]]; then

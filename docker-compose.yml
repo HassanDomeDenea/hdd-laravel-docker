@@ -13,6 +13,9 @@ services:
     container_name: ${MARIADB_CONTAINER_NAME:-mariadb}
     restart: unless-stopped
     environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:-}
+      MARIADB_USER: ${MARIADB_USER:-user}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:-}
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       TZ: ${TZ:-UTC}
     healthcheck:

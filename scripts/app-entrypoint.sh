@@ -32,7 +32,20 @@ export APP_BUILD_ASSETS APP_GIT_PULL_ENABLED APP_GIT_PULL_ON_START APP_GIT_PULL_
 if [[ -f /root/.ssh/id_ed25519 ]]; then
   cp /root/.ssh/id_ed25519 /tmp/ssh_key
   chmod 600 /tmp/ssh_key
-  echo -e "Host *\n  IdentityFile /tmp/ssh_key\n  StrictHostKeyChecking no" > /root/.ssh/config
+  cat > /root/.ssh/config <<'EOF'
+Host github.com
+  IdentityFile /tmp/ssh_key
+  IdentitiesOnly yes
+  StrictHostKeyChecking yes
+Host gitlab.com
+  IdentityFile /tmp/ssh_key
+  IdentitiesOnly yes
+  StrictHostKeyChecking yes
+Host bitbucket.org
+  IdentityFile /tmp/ssh_key
+  IdentitiesOnly yes
+  StrictHostKeyChecking yes
+EOF
   chmod 600 /root/.ssh/config
 fi
 

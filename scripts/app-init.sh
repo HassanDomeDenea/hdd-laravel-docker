@@ -36,7 +36,7 @@ if [[ ! -d "${APP_PATH}/.git" ]]; then
   fi
 fi
 
-if [[ ! -f "${APP_PATH}/public/.user.ini" ]]; then
+if [[ -f "${APP_PATH}/public/.user.ini" ]]; then
   cp -f "${APP_PATH}/public/.user.ini" "/usr/local/etc/php/conf.d/z-${APP_CONTAINER_NAME}.ini"
 fi
 
@@ -53,5 +53,5 @@ if [[ -d "${APP_PATH}" ]]; then
 fi
 
 if [[ "${APP_GIT_PULL_ON_START}" == "1" ]]; then
-  /opt/scripts/app-update.sh
+  /opt/scripts/app-update.sh --no-restart
 fi
