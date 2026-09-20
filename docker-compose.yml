@@ -29,6 +29,11 @@ services:
       - mariadb_data:/var/lib/mysql
     networks:
       - app-network
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "5"
   redis:
     image: redis:7
     container_name: ${REDIS_CONTAINER_NAME:-redis}
@@ -39,6 +44,11 @@ services:
       - redis_data:/data
     networks:
       - app-network
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "5"
   app1:
     <<: *app-base
     build:
@@ -84,6 +94,11 @@ services:
       - ${DATA_PATH:-./data}/${APP1_CONTAINER_NAME:-app1}/database:/var/www/${APP1_CONTAINER_NAME:-app1}/database
       - ${ENV_PATH:-./env}/${APP1_CONTAINER_NAME:-app1}.env:/env/${APP1_CONTAINER_NAME:-app1}.env
       - ${ENV_PATH:-./env}/${APP1_CONTAINER_NAME:-app1}.env:/var/www/${APP1_CONTAINER_NAME:-app1}/.env
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "5"
   app2:
     <<: *app-base
     build:
@@ -129,6 +144,11 @@ services:
       - ${DATA_PATH:-./data}/${APP2_CONTAINER_NAME:-app2}/database:/var/www/${APP2_CONTAINER_NAME:-app2}/database
       - ${ENV_PATH:-./env}/${APP2_CONTAINER_NAME:-app2}.env:/env/${APP2_CONTAINER_NAME:-app2}.env
       - ${ENV_PATH:-./env}/${APP2_CONTAINER_NAME:-app2}.env:/var/www/${APP2_CONTAINER_NAME:-app2}/.env
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "5"
   app3:
     <<: *app-base
     build:
@@ -174,6 +194,11 @@ services:
       - ${DATA_PATH:-./data}/${APP3_CONTAINER_NAME:-app3}/database:/var/www/${APP3_CONTAINER_NAME:-app3}/database
       - ${ENV_PATH:-./env}/${APP3_CONTAINER_NAME:-app3}.env:/env/${APP3_CONTAINER_NAME:-app3}.env
       - ${ENV_PATH:-./env}/${APP3_CONTAINER_NAME:-app3}.env:/var/www/${APP3_CONTAINER_NAME:-app3}/.env
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "5"
   app4:
     <<: *app-base
     build:
@@ -219,6 +244,11 @@ services:
       - ${DATA_PATH:-./data}/${APP4_CONTAINER_NAME:-app4}/database:/var/www/${APP4_CONTAINER_NAME:-app4}/database
       - ${ENV_PATH:-./env}/${APP4_CONTAINER_NAME:-app4}.env:/env/${APP4_CONTAINER_NAME:-app4}.env
       - ${ENV_PATH:-./env}/${APP4_CONTAINER_NAME:-app4}.env:/var/www/${APP4_CONTAINER_NAME:-app4}/.env
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "5"
   minio:
     image: minio/minio:latest
     container_name: ${MINIO_CONTAINER_NAME:-minio}
@@ -237,6 +267,11 @@ services:
       - app-network
     volumes:
       - ${DATA_PATH:-./data}/minio:/data
+    logging:
+      driver: local
+      options:
+        max-size: "20m"
+        max-file: "5"
 networks:
   app-network:
     name: ${DOCKER_NETWORK_NAME:-br-laraveln0}
